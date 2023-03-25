@@ -108,3 +108,6 @@ const christy: CatDog = {
   breed: "Husky",
   age: 9
 }
+
+
+export default Point;
