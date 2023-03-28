@@ -1,58 +1,85 @@
-interface Todo {
-  text: string;
-  completed: boolean;
+class Player {
+  constructor(
+    public first: string,
+    public last: string,
+    protected _score: number = 0
+  ) {}
+
+  private secretMethod(): void {
+    console.log("SECRET METHOD!!");
+  }
+
+  get fullName(): string {
+    return `${this.first} ${this.last}`;
+  }
+
+  get score(): number {
+    return this._score;
+  }
+
+  set score(newScore: number) {
+    if (newScore < 0) {
+      throw new Error("SCORE CANNOT BE NEGATIVE");
+    }
+    this._score = newScore;
+  }
 }
 
-const btn = document.getElementById("btn");
-const input = document.getElementById("todoinput")! as HTMLInputElement;
-const form = document.querySelector("form")!;
-const list = document.getElementById("todolist")!;
-
-const todos: Todo[] = readTodos();
-todos.forEach(createTodo);
-
-function readTodos(): Todo[] {
-  const todosJSON = localStorage.getItem("todos");
-  if(todosJSON === null) return [];
-  return JSON.parse(todosJSON);
+class SuperPlayer extends Player {
+  public isAdmin: boolean = true;
+  maxScore() {
+    this._score = 9999;
+  }
 }
 
-function saveTodos() {
-  localStorage.setItem("todos", JSON.stringify(todos));
+const elton = new Player("Elton", "Stelle");
+
+interface Colorful {
+  color: string;
 }
 
-function handleSubmit(e: SubmitEvent) {
-  e.preventDefault();
-  const newTodo: Todo = {
-    text: input.value,
-    completed: false,
-  };
-  createTodo(newTodo);
-  todos.push(newTodo);
-
-  saveTodos();
-  input.value = "";
+class Bike implements Colorful {
+  constructor(public color: string) {}
 }
 
-function createTodo(todo: Todo) {
-  const newLI = document.createElement("LI");
-  const checkbox = document.createElement("input");
-  checkbox.type = "checkbox";
-  checkbox.checked = todo.completed;
-
-  checkbox.addEventListener("change", function() {
-    todo.completed = checkbox.checked;
-    saveTodos();
-  });
-
-  newLI.append(todo.text );
-  newLI.append(checkbox);
-  list.append(newLI);
+class Jacket implements Colorful {
+  constructor(public brand: string, public color: string) {}
 }
 
-form.addEventListener("submit", handleSubmit);
+const bike1 = new Bike("red");
+const jacket1 = new Jacket("prada", "black");
 
-// btn.addEventListener("click", function() {
-//   alert(input.value);
-//   input.value = "";
-// });
+abstract class Employee {
+  constructor(public first: string, public last: string) {}
+  abstract getPay(): number;
+  greet() {}
+}
+
+class FullTimeEmployee extends Employee {
+  constructor(first: string, last: string, private salary: number) {
+    super(first, last);
+  }
+  getPay(): number {
+    return this.salary;
+  }
+}
+
+class PartTimeEmployee extends Employee {
+  constructor(
+    first: string,
+    last: string,
+    private hourlyRate: number,
+    private hoursWorked: number
+  ) {
+    super(first, last);
+  }
+  getPay(): number {
+    return this.hourlyRate * this.hoursWorked;
+  }
+}
+
+const betty = new FullTimeEmployee("Betty", "White", 95000);
+console.log(betty.getPay());
+
+const bill = new PartTimeEmployee("Bill", "Billerson", 24, 1100);
+console.log(bill.getPay());
