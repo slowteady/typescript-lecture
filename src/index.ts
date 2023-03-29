@@ -1,85 +1,36 @@
-class Player {
-  constructor(
-    public first: string,
-    public last: string,
-    protected _score: number = 0
-  ) {}
+// 1. 제네릭을 이용하여 타입을 설정할 수 있다.
+const nums: Array<number> = []; // = const nums: number[] = [];
+const colors: Array<string> = [];
 
-  private secretMethod(): void {
-    console.log("SECRET METHOD!!");
-  }
+// 2. 제네릭을 이용하여 Element 타입 지정이 가능하다.
+const inputEl = document.querySelector<HTMLInputElement>("#username")!;
+console.log(inputEl);
+inputEl.value = "Hacked";
 
-  get fullName(): string {
-    return `${this.first} ${this.last}`;
-  }
+const btn = document.querySelector<HTMLButtonElement>(".btn")!;
 
-  get score(): number {
-    return this._score;
-  }
-
-  set score(newScore: number) {
-    if (newScore < 0) {
-      throw new Error("SCORE CANNOT BE NEGATIVE");
-    }
-    this._score = newScore;
-  }
+// 3. T는 Type을 의미, 함수 호출 타입과 리턴 타입이 같을 때 제네릭을 사용한다.
+function numberIdentity(item: number): number {
+  return item;
 }
 
-class SuperPlayer extends Player {
-  public isAdmin: boolean = true;
-  maxScore() {
-    this._score = 9999;
-  }
+function stringIdentity(item: string): string {
+  return item;
 }
 
-const elton = new Player("Elton", "Stelle");
-
-interface Colorful {
-  color: string;
+function booleanIdentity(item: boolean): boolean {
+  return item;
 }
 
-class Bike implements Colorful {
-  constructor(public color: string) {}
+interface Cat {
+  name: string;
+  breed: string;
 }
 
-class Jacket implements Colorful {
-  constructor(public brand: string, public color: string) {}
+function identity<T>(item: T): T {
+  return item;
 }
 
-const bike1 = new Bike("red");
-const jacket1 = new Jacket("prada", "black");
+identity<number>(7);
+identity<Cat>({name: "json", breed: "no"});
 
-abstract class Employee {
-  constructor(public first: string, public last: string) {}
-  abstract getPay(): number;
-  greet() {}
-}
-
-class FullTimeEmployee extends Employee {
-  constructor(first: string, last: string, private salary: number) {
-    super(first, last);
-  }
-  getPay(): number {
-    return this.salary;
-  }
-}
-
-class PartTimeEmployee extends Employee {
-  constructor(
-    first: string,
-    last: string,
-    private hourlyRate: number,
-    private hoursWorked: number
-  ) {
-    super(first, last);
-  }
-  getPay(): number {
-    return this.hourlyRate * this.hoursWorked;
-  }
-}
-
-const betty = new FullTimeEmployee("Betty", "White", 95000);
-console.log(betty.getPay());
-
-const bill = new PartTimeEmployee("Bill", "Billerson", 24, 1100);
-console.log(bill.getPay());
