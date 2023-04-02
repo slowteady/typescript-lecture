@@ -6,6 +6,11 @@ module.exports = {
   entry: "./src/index.ts",
   // devtool: 개발 환경에서의 필요한 3rd party 
   devtool: "inline-source-map",
+  devServer: {
+    static: {
+      directory: path.join(__dirname, "./"),
+    },
+  },
   // rule: 규칙 설정
   module: {
     rules: [
