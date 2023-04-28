@@ -1,15 +1,10 @@
 import React from "react";
-
-
-interface Item {
-  id: number;
-  product: string;
-  quantity: number;
-}
+import Item from "../models/item";
 
 interface ShoppingListProps {
   items: Item[];
 }
+
 //2. props도 타입 설정 해주어야 한다.
 const ShoppingList = ({items}: ShoppingListProps): JSX.Element => {
   return (
